@@ -1,0 +1,42 @@
+// [WALK]
+
+        // player goes right when users presses d, with a velocity defined in the float called runspeed
+        // player goes left when users presses a, with a velocity defined in the float called runspeed
+        // otherwise if the user is not pressing anything the velocity goes to 0 and the player stands still
+        // also the sprite is flipped so that the player faces the right way
+        if (Input.GetKey("d"))
+        {
+            rb2d.velocity = new Vector2(runSpeed, rb2d.velocity.y);
+            spriterenderer.flipX = true;
+        }
+        else if (Input.GetKey("a"))
+        {
+            rb2d.velocity = new Vector2(-runSpeed, rb2d.velocity.y);
+            spriterenderer.flipX = false;
+        }
+        else
+        {
+            rb2d.velocity = new Vector2(0, rb2d.velocity.y);
+}
+
+// [BETTER JUMP]
+        // if player is falling 
+        if (rb2d.velocity.y < 0)
+        {
+            //apply fall multiplier
+            rb2d.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        // if player is not falling and not holding space (jumpkey)
+        else if (rb2d.velocity.y > 0 && !Input.GetKey("space"))
+        {
+        //apply slower jump multiplier so that when the user holds space the player jumps a little higher
+            rb2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }
+
+    // float for the multiplier that drags the play down when the user presses space normally
+    [SerializeField]
+    public float fallMultiplier = 2.5f;
+
+    // float for the multiplier that drags the play down when the user presses space long
+    [SerializeField]
+    public float lowJumpMultiplier = 2f;
